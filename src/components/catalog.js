@@ -1,0 +1,17 @@
+import { icon } from './icons.js';
+import { categories } from '../data.js';
+import { config, safeUrl } from '../config.js';
+export function Catalog() {
+ return `<section id="generators" class="catalog-section reveal" aria-labelledby="catalog-title"><div class="featured"><div class="catalog-heading"><h2 id="catalog-title" class="section-title"><span class="flame" aria-hidden="true">♨</span> Featured Generators</h2><p>Real creators. Real tools. Real possibilities.</p></div><div class="carousel-shell"><button class="carousel-arrow previous icon-button" aria-label="Previous generators" aria-controls="generator-track">${icon('chevron')}</button><div id="generator-track" class="generator-track" role="region" aria-roledescription="carousel" aria-label="Featured generators; use left and right arrow keys to browse" tabindex="0"></div><button class="carousel-arrow next icon-button" aria-label="Next generators" aria-controls="generator-track">${icon('chevron')}</button></div><div class="catalog-meta"><span id="results-status" role="status" aria-live="polite"></span><span>Concept previews are not available to purchase.</span></div></div><aside id="categories" class="category-panel" aria-labelledby="category-title"><h2 id="category-title" class="section-title">Browse by Category</h2><div class="category-grid">${categories.map(c=>`<button class="category ${c.id==='all'?'selected':''}" data-category="${c.id}" aria-pressed="${c.id==='all'}">${icon(c.icon)}<span>${c.label.replace(' & ',' &<br>')}</span></button>`).join('')}</div></aside></section>`;
+}
+export function GeneratorCard(item) {
+ const accessUrl = item.confirmed && safeUrl(config.generatorUrls[item.id]);
+ const checkoutUrl = item.confirmed && safeUrl(config.checkoutUrls[item.id]);
+ const action = checkoutUrl
+   ? `<a class="button gold" href="${checkoutUrl}" target="_blank" rel="noopener noreferrer" aria-label="Purchase ${item.name} on Beacons (new tab)">Purchase ${icon('arrow')}</a>`
+   : accessUrl
+   ? `<a class="button gold" href="${accessUrl}" target="_blank" rel="noopener noreferrer" aria-label="Open ${item.name} in ChatGPT (new tab)">Open GPT ${icon('arrow')}</a>`
+   : `<button class="button ${item.confirmed?'gold':'card-button'}" data-product="${item.id}">${item.confirmed?'Explore':'View concept'} ${icon('arrow')}</button>`;
+ return `<article class="generator-card" data-id="${item.id}" aria-label="${item.name}${item.confirmed?'':', placeholder concept'}"><img src="/assets/${item.image}-480.webp" srcset="/assets/${item.image}-240.webp 240w, /assets/${item.image}-480.webp 480w" sizes="(max-width: 600px) 66vw, 200px" width="480" height="720" alt="${item.confirmed?`${item.name} editorial artwork`:'Illustrative artwork for this preview concept'}" loading="lazy" draggable="false"/><span class="card-badge ${item.confirmed?'confirmed':''}">${item.confirmed?'Confirmed':'Concept preview'}</span><div class="card-content"><h3>${item.name.replace('™','<sup>™</sup>')}</h3><p>${accessUrl?'Opens in ChatGPT':item.confirmed?`Meet ${item.name}`:'Placeholder · Not yet confirmed'}</p>${action}</div></article>`;
+}
+export const ComingSoonCard = () => `<article class="generator-card coming-soon"><span class="new-badge">Up next</span><div class="silk" aria-hidden="true"></div>${icon('spark')}<h3>More<br>Generators<br>Coming Soon</h3><a class="button outline" href="#newsletter">Stay in the loop ${icon('arrow')}</a></article>`;

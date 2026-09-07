@@ -43,6 +43,6 @@ The experience video, bundle offerings, newsletter service, and contact channel 
 
 ## Repository
 
-This repository contains the landing page source, optimized assets, original artwork, and product-copy drafts. It does not deploy the website automatically. Local build outputs, dependencies, environment files, and verification screenshots are ignored.
+This repository contains the landing page source, optimized assets, original artwork, and product-copy drafts. Pushes to main publish the website through GitHub Actions to https://sweetrose37.github.io/GENELYRA/. Local build outputs, dependencies, environment files, and verification screenshots are ignored.
 
 To run the optional browser checks, start the preview at port 4173 and run `node scripts/verify-ui.mjs` with Microsoft Edge installed.

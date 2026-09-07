@@ -11,6 +11,8 @@ import { initNewsletter } from './newsletter.js';
 
 document.querySelector('#app').innerHTML = `${Header()}<main id="main">${Hero()}${Catalog()}${HowItWorks()}</main>${Footer()}<nav class="section-progress" aria-label="Page sections">${[['home','Home'],['generators','Generators'],['how-it-works','How it works'],['newsletter','Newsletter']].map(([id,label])=>`<a href="#${id}" aria-label="${label}"></a>`).join('')}</nav><dialog id="detail-dialog" aria-labelledby="dialog-title"><button class="dialog-close icon-button" aria-label="Close dialog">${icon('close')}</button><div class="dialog-content"></div></dialog>`;
 
+document.querySelectorAll('[src], [srcset]').forEach(el => { for (const attr of ['src', 'srcset']) { const value = el.getAttribute(attr); if (value) el.setAttribute(attr, value.replaceAll('/assets/', import.meta.env.BASE_URL + 'assets/')); } });
+
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
 const track = document.querySelector('#generator-track');
@@ -19,6 +21,7 @@ let category = 'all';
 function renderCatalog() {
  const items = filterGenerators(category, search.value);
  track.innerHTML = items.length ? items.map(GeneratorCard).join('') + (category === 'all' && !search.value.trim() ? ComingSoonCard() : '') : `<div class="empty-state">${icon('spark')}<h3>Something new is on the horizon.</h3><p>No generators match this selection yet.</p><button class="button outline" data-reset>Explore all generators ${icon('arrow')}</button></div>`;
+ track.querySelectorAll('img').forEach(el => { for (const attr of ['src', 'srcset']) { const value = el.getAttribute(attr); if (value) el.setAttribute(attr, value.replaceAll('/assets/', import.meta.env.BASE_URL + 'assets/')); } });
  track.scrollLeft = 0;
  document.querySelector('#results-status').textContent = `${items.length} ${items.length === 1 ? 'generator' : 'generators'}${category==='all'?'':' in this category'}`;
  requestAnimationFrame(updateArrows);
